@@ -1,1 +1,48 @@
-# mystatrepo
+---
+title: "Stat 433 HW1"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(magrittr) 
+library(dplyr)
+library(ggplot2)
+library(data.table)
+```
+
+```{r}
+#reading in the the date
+wi_bridges2020 = fread("https://www.fhwa.dot.gov/bridge/nbi/2020/delimited/WI20.txt")
+
+```
+
+```{r}
+#change column names, select certain variables, pipe them into new data set to work with 
+wi_bridges2020_select=wi_bridges2020%>% 
+  rename(bridge_id=STRUCTURE_NUMBER_008,
+fips_code=STATE_CODE_001,
+rating_decksc=DECK_COND_058,
+rating_supersc=SUPERSTRUCTURE_COND_059,
+rating_subsc=SUBSTRUCTURE_COND_060,
+year_built=YEAR_BUILT_027) %>% 
+  select(bridge_id,fips_code,rating_decksc,rating_subsc,rating_supersc,year_built) 
+wi_bridges2020_select
+
+```
+
+```{r}
+#how many bridges built per year
+ggplot(data = wi_bridges2020_select, aes(year_built)) +
+  geom_histogram(color = "black", fill = "light blue") +
+  xlab("Year Bridges was Built") +
+  xlab("Number of Bridges Built")+
+  ggtitle("How Many Bridges Built Per Year") 
+
+
+
+```
